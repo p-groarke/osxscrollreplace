@@ -25,6 +25,10 @@ const int scrollDown = -1;
 
 //// BUG ////
 
+CFRunLoopSourceRef runLoopSourceMDOWN;
+CFRunLoopSourceRef runLoopSourceMUP;    
+CFMachPortRef eventTapMDOWN;
+CFMachPortRef eventTapMUP;
 
 // Callback for event, this is where you modify it.
 CGEventRef MiddleDownCall (CGEventTapProxy proxy, CGEventType type,
@@ -32,6 +36,7 @@ CGEventRef MiddleDownCall (CGEventTapProxy proxy, CGEventType type,
 {
     if (CGEventGetIntegerValueField(event, kCGMouseEventButtonNumber) == kCGMouseButtonCenter) {
         //printf("middle down\n");
+        //CFRelease(event);
         return NULL;
     }
 
@@ -44,6 +49,7 @@ CGEventRef MiddleUpCall (CGEventTapProxy proxy, CGEventType type,
 {
     if (CGEventGetIntegerValueField(event, kCGMouseEventButtonNumber) == kCGMouseButtonCenter) {
         //printf("middle up\n");
+        //CFRelease(event);
         return NULL;
     }
     return event;
@@ -53,12 +59,11 @@ CGEventRef MiddleUpCall (CGEventTapProxy proxy, CGEventType type,
 void fixFuckingValveBug()
 {
     // FIX FUCKING VALVE SHIT
-    CGEventMask mouseMiddleDown = CGEventMaskBit(kCGEventOtherMouseDown);
+    CGEventMask mouseMiddleDown = CGEventMaskBit(kCGEventOtherMouseDown);//kCGEventOtherMouseDown);
     CGEventMask mouseMiddleUp = CGEventMaskBit(kCGEventOtherMouseUp);
 
     // Create event to listen.
-    CFMachPortRef eventTap;
-    eventTap = CGEventTapCreate (
+    eventTapMDOWN = CGEventTapCreate (
         kCGHIDEventTap,
         kCGHeadInsertEventTap,
         kCGEventTapOptionDefault, // Active, we can modify the event.
@@ -66,30 +71,24 @@ void fixFuckingValveBug()
         MiddleDownCall, // Callback.
         NULL // Pointer to data passed to user callback.
     );
-    if (eventTap == NULL)
-    {
-        printf("eventTap was NULL!\nExiting.\n");
-        exit(0);
-    }
 
     // Create loop to run.
-    CFRunLoopSourceRef runLoopSource;
-    runLoopSource = CFMachPortCreateRunLoopSource (
+    runLoopSourceMDOWN = CFMachPortCreateRunLoopSource (
         kCFAllocatorDefault, // Synonym of NULL
-        eventTap, // My port
+        eventTapMDOWN, // My port
         0 // Priority, ignored
     );
 
     // Add to current loop.
     CFRunLoopAddSource (
         CFRunLoopGetCurrent(), // The runloop to modify (current one).
-        runLoopSource, // My runLoopSource
+        runLoopSourceMDOWN, // My runLoopSource
         kCFRunLoopCommonModes // This adds the default and other modes.
     );
 
 
     // Create event to listen.
-    eventTap = CGEventTapCreate (
+    eventTapMUP = CGEventTapCreate (
         kCGHIDEventTap,
         kCGHeadInsertEventTap,
         kCGEventTapOptionDefault, // Active, we can modify the event.
@@ -97,29 +96,29 @@ void fixFuckingValveBug()
         MiddleUpCall, // Callback.
         NULL // Pointer to data passed to user callback.
     );
-    if (eventTap == NULL)
+    if (eventTapMUP == NULL || eventTapMDOWN == NULL)
     {
         printf("eventTap was NULL!\nExiting.\n");
         exit(0);
     }
 
     // Create loop to run.
-    runLoopSource = CFMachPortCreateRunLoopSource (
+    runLoopSourceMUP = CFMachPortCreateRunLoopSource (
         kCFAllocatorDefault, // Synonym of NULL
-        eventTap, // My port
+        eventTapMUP, // My port
         0 // Priority, ignored
     );
 
     // Add to current loop.
     CFRunLoopAddSource (
         CFRunLoopGetCurrent(), // The runloop to modify (current one).
-        runLoopSource, // My runLoopSource
+        runLoopSourceMUP, // My runLoopSource
         kCFRunLoopCommonModes // This adds the default and other modes.
     );
 
 }
 
-//// BUG ////
+////////
 
 // Callback for event, this is where you modify it.
 CGEventRef MyEventTapCallBack (CGEventTapProxy proxy, CGEventType type,
@@ -203,6 +202,11 @@ int main(int argc, char* argv[]) {
     // Cleanup
     CFRelease(eventTap); // If NULL will crash.
     CFRelease(runLoopSource);
+
+    CFRelease(eventTapMDOWN);
+    CFRelease(eventTapMUP);
+    CFRelease(runLoopSourceMDOWN);
+    CFRelease(runLoopSourceMUP);
 
     return 0;
 }
