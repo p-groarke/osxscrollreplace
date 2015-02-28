@@ -1,16 +1,10 @@
-/*          DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
-                    Version 2, December 2004
-
- Copyright (C) 2014 Philippe Groarke <philippe.groarke@gmail.com>
-
- Everyone is permitted to copy and distribute verbatim or modified
- copies of this license document, and changing it is allowed as long
- as the name is changed.
-
-            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
-   TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
-
-  0. You just DO WHAT THE FUCK YOU WANT TO. */
+/*
+ * To the extent possible under law, Philippe Groarke has waived all
+ * copyright and related or neighboring rights to osxscrollreplace.
+ *
+ * You should have received a copy of the CC0 legalcode along with this
+ * work.  If not, see http://creativecommons.org/publicdomain/zero/1.0/
+ */
 
 
 #import <ApplicationServices/ApplicationServices.h>
@@ -26,7 +20,7 @@ const int scrollDown = -1;
 //// BUG ////
 
 CFRunLoopSourceRef runLoopSourceMDOWN;
-CFRunLoopSourceRef runLoopSourceMUP;    
+CFRunLoopSourceRef runLoopSourceMUP;
 CFMachPortRef eventTapMDOWN;
 CFMachPortRef eventTapMUP;
 
