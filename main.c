@@ -8,7 +8,6 @@
 
 
 #import <ApplicationServices/ApplicationServices.h>
-//#import <Carbon/Carbon.h>
 #include <time.h>
 
 struct timeval timer, currentTime;
@@ -49,71 +48,6 @@ CGEventRef MiddleUpCall (CGEventTapProxy proxy, CGEventType type,
     return event;
 }
 
-
-// void fixFuckingValveBug()
-// {
-//     // FIX FUCKING VALVE SHIT
-//     CGEventMask mouseMiddleDown = CGEventMaskBit(kCGEventOtherMouseDown);//kCGEventOtherMouseDown);
-//     CGEventMask mouseMiddleUp = CGEventMaskBit(kCGEventOtherMouseUp);
-
-//     // Create event to listen.
-//     eventTapMDOWN = CGEventTapCreate (
-//         kCGHIDEventTap,
-//         kCGHeadInsertEventTap,
-//         kCGEventTapOptionDefault, // Active, we can modify the event.
-//         mouseMiddleDown, // Type of event.
-//         MiddleDownCall, // Callback.
-//         NULL // Pointer to data passed to user callback.
-//     );
-
-//     // Create loop to run.
-//     runLoopSourceMDOWN = CFMachPortCreateRunLoopSource (
-//         kCFAllocatorDefault, // Synonym of NULL
-//         eventTapMDOWN, // My port
-//         0 // Priority, ignored
-//     );
-
-//     // Add to current loop.
-//     CFRunLoopAddSource (
-//         CFRunLoopGetCurrent(), // The runloop to modify (current one).
-//         runLoopSourceMDOWN, // My runLoopSource
-//         kCFRunLoopCommonModes // This adds the default and other modes.
-//     );
-
-
-//     // Create event to listen.
-//     eventTapMUP = CGEventTapCreate (
-//         kCGHIDEventTap,
-//         kCGHeadInsertEventTap,
-//         kCGEventTapOptionDefault, // Active, we can modify the event.
-//         mouseMiddleUp, // Type of event.
-//         MiddleUpCall, // Callback.
-//         NULL // Pointer to data passed to user callback.
-//     );
-//     if (eventTapMUP == NULL || eventTapMDOWN == NULL)
-//     {
-//         printf("eventTap was NULL!\nExiting.\n");
-//         exit(0);
-//     }
-
-//     // Create loop to run.
-//     runLoopSourceMUP = CFMachPortCreateRunLoopSource (
-//         kCFAllocatorDefault, // Synonym of NULL
-//         eventTapMUP, // My port
-//         0 // Priority, ignored
-//     );
-
-//     // Add to current loop.
-//     CFRunLoopAddSource (
-//         CFRunLoopGetCurrent(), // The runloop to modify (current one).
-//         runLoopSourceMUP, // My runLoopSource
-//         kCFRunLoopCommonModes // This adds the default and other modes.
-//     );
-
-// }
-
-////////
-
 // Callback for event, this is where you modify it.
 CGEventRef MyEventTapCallBack (CGEventTapProxy proxy, CGEventType type,
     CGEventRef event, void *refcon)
@@ -153,8 +87,6 @@ CGEventRef MyEventTapCallBack (CGEventTapProxy proxy, CGEventType type,
 
 // ENTRY POINT
 int main(int argc, char* argv[]) {
-
-    // fixFuckingValveBug();
 
     gettimeofday(&timer, NULL);
 
